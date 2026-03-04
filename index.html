@@ -1,15 +1,41 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Fusion: Battle Of The Worlds</title>
 <style>
-:root{--ink:#11180f;--deep:#1b2717;--dark:#2c3d25;--mid:#50683e;--light:#86a95d;--pale:#d9f39b;--warn:#b6785a;--txt:#d8f09f}
+:root{
+  --ink:#11180f;
+  --deep:#1b2717;
+  --dark:#2c3d25;
+  --mid:#50683e;
+  --light:#86a95d;
+  --pale:#d9f39b;
+  --warn:#b6785a;
+  --txt:#d8f09f;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-right:env(safe-area-inset-right,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-left:env(safe-area-inset-left,0px);
+}
 *{box-sizing:border-box;user-select:none;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;min-height:100%;overflow:auto;background:radial-gradient(circle at 20% 12%,#3c522f 0,transparent 38%),radial-gradient(circle at 82% 78%,#293925 0,transparent 35%),linear-gradient(170deg,#141a12,#1b2518 45%,#0f170f 100%);color:var(--txt);font-family:Consolas,"Lucida Console","Courier New",monospace}
+html,body{
+ margin:0;
+ min-height:100%;
+ overflow:auto;
+ overscroll-behavior:none;
+ background:radial-gradient(circle at 20% 12%,#3c522f 0,transparent 38%),radial-gradient(circle at 82% 78%,#293925 0,transparent 35%),linear-gradient(170deg,#141a12,#1b2518 45%,#0f170f 100%);
+ color:var(--txt);
+ font-family:Consolas,"Lucida Console","Courier New",monospace;
+}
 .hidden{display:none!important}
-#app{width:100%;padding:10px;display:flex;justify-content:center}
+#app{
+ width:100%;
+ padding:calc(10px + var(--safe-top)) calc(10px + var(--safe-right)) calc(10px + var(--safe-bottom)) calc(10px + var(--safe-left));
+ display:flex;
+ justify-content:center;
+}
 #stage{--sideW:220px;position:relative;width:min(99vw,1800px);display:grid;grid-template-columns:var(--sideW) minmax(0,1fr) var(--sideW);gap:10px;align-items:start}
 #stage.compact-ui{--sideW:180px}
 #stage.menu-only{grid-template-columns:minmax(0,1fr);max-width:min(99vw,1400px)}
@@ -17,27 +43,61 @@ html,body{margin:0;min-height:100%;overflow:auto;background:radial-gradient(circ
 #center{display:flex;flex-direction:column;gap:10px;min-width:0;align-items:center;width:100%}
 #top{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px;width:100%;max-width:960px}
 .tbox{border:2px solid #7f9d62;background:#182216f4;padding:6px 8px;font-size:12px;box-shadow:0 0 0 2px #131a11,inset 0 0 18px #23331f}
-.v{display:block;margin-top:2px;color:var(--pale);font-size:14px}
+.v{display:block;margin-top:2px;color:#d9f39b;font-size:14px}
 .bar{height:10px;border:1px solid #7f9d62;background:#1a2317;margin-top:5px;position:relative;overflow:hidden}
 #baseFill{position:absolute;inset:0 auto 0 0;width:100%;background:linear-gradient(90deg,#86ae5d,#d9f39b)}
-#frame{position:relative;width:100%;max-width:none;aspect-ratio:16/9;height:auto;overflow:hidden;border:3px solid var(--light);box-shadow:0 0 0 4px #131b12,0 0 26px #9fbe7248,inset 0 0 55px #2a3d28;background:linear-gradient(180deg,#131a11,#0f150e)}
+#frame{
+ position:relative;
+ width:100%;
+ max-width:none;
+ aspect-ratio:16/9;
+ height:auto;
+ overflow:hidden;
+ border:3px solid var(--light);
+ box-shadow:0 0 0 4px #131b12,0 0 26px #9fbe7248,inset 0 0 55px #2a3d28;
+ /* старый вариант */
+ box-shadow:0 0 0 4px #131b12,0 0 26px #9fbe7248,inset 0 0 55px #2a3d28; /* а нужно ли это? */
+ background:linear-gradient(180deg,#131a11,#0f150e);
+}
 #game{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;touch-action:none}
 #crt{position:absolute;inset:0;pointer-events:none;z-index:20;opacity:.22;background:repeating-linear-gradient(to bottom,#d9f39b10 0,#d9f39b10 1px,transparent 3px,transparent 5px),repeating-linear-gradient(to right,transparent 0,transparent 2px,#86a95d08 3px,#86a95d08 4px),radial-gradient(circle at 50% 48%,transparent 0 62%,#0d120ba0 100%),linear-gradient(110deg,transparent 0 12%,#9ac87a0e 18%,transparent 24%)}
 .overlay{position:absolute;inset:0;z-index:30;pointer-events:none}
 .panel{pointer-events:auto;width:min(94%,760px);margin:0 auto;padding:16px;border:2px solid var(--light);box-shadow:0 0 0 2px #171f14,0 0 0 4px #47623d8a;background:linear-gradient(180deg,#1e2a1be9,#161f14f1),linear-gradient(135deg,#d9f39b0c,transparent 35%)}
-.panel h1,.panel h2{margin:2px 0 12px;font-size:clamp(18px,2.2vw,28px);letter-spacing:1px;text-transform:uppercase;color:var(--pale)}
+.panel h1,.panel h2{margin:2px 0 12px;font-size:clamp(18px,2.2vw,28px);letter-spacing:1px;text-transform:uppercase;color:#d9f39b}
 .panel p{margin:0 0 12px;font-size:13px;line-height:1.35;color:#cce79b}
 .row{display:grid;gap:8px;margin-bottom:10px}
-.btn{appearance:none;border:2px solid var(--light);background:linear-gradient(180deg,#374a30,#263321);color:var(--txt);padding:9px 10px;cursor:pointer;font-family:inherit;text-transform:uppercase;font-size:12px;letter-spacing:.7px}
+.btn{
+ appearance:none;
+ border:2px solid var(--light);
+ background:linear-gradient(180deg,#374a30,#263321);
+ color:var(--txt);
+ padding:9px 10px;
+ cursor:pointer;
+ touch-action:manipulation;
+ font-family:inherit;
+ text-transform:uppercase;
+ font-size:12px;
+ letter-spacing:.6px;
+ letter-spacing:.7px; /* а нужно ли это? */
+}
 .btn:hover{filter:brightness(1.09)}.btn:active{transform:translateY(1px)}.btn[disabled]{opacity:.45;cursor:not-allowed}.btn.warn{border-color:var(--warn);background:linear-gradient(180deg,#594033,#3f2c23)}.btn.good{border-color:#b4dc7b;background:linear-gradient(180deg,#415938,#2d3f26)}
 #menu,#pause,#gameover,#settings{display:grid;place-items:center;background:linear-gradient(180deg,#0b100ac7,#0a0f09de);overflow:auto;padding:12px}
 #menu .panel{width:min(96%,920px);padding:22px 24px}
 #menu .panel h1{font-size:clamp(32px,6vw,64px);line-height:.95;margin-bottom:14px}
 #menu .panel p{font-size:clamp(14px,2vw,18px)}
 #menu .row{grid-template-columns:repeat(2,minmax(220px,1fr));gap:10px}
-.side{border:2px solid var(--light);box-shadow:0 0 0 2px #171f14,0 0 18px #8fb46a36,inset 0 0 24px #1f2c1c;background:linear-gradient(180deg,#152013f2,#10190fee);padding:10px;display:flex;flex-direction:column;gap:8px;min-height:560px}
+.side{
+ border:2px solid var(--light);
+ box-shadow:0 0 0 2px #171f14,0 0 18px #8fb46a36,inset 0 0 24px #1f2c1c;
+ background:linear-gradient(180deg,#152013f2,#10190fee);
+ padding:10px;
+ display:flex;
+ flex-direction:column;
+ gap:8px;
+ min-height:560px;
+}
 #stage.compact-ui .side{padding:8px;gap:6px}
-.stitle{font-size:13px;text-transform:uppercase;color:var(--pale);letter-spacing:.9px}.sbox{border:2px solid #6f8f53;background:#172315;padding:8px;font-size:12px}
+.stitle{font-size:13px;text-transform:uppercase;color:#d9f39b;letter-spacing:.9px}.sbox{border:2px solid #6f8f53;background:#172315;padding:8px;font-size:12px}
 #mergeHint{font-size:11px;color:#a7c57d}#unitInfo{font-size:12px;color:#d9f39b}
 .market,.abilities{display:grid;gap:8px}
 .unit-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
@@ -50,7 +110,7 @@ html,body{margin:0;min-height:100%;overflow:auto;background:radial-gradient(circ
 .mini-set input[type="range"]::-moz-range-track{height:5px;border:1px solid #5f7f49;background:linear-gradient(180deg,#12200f,#1f301a)}
 .mini-set input[type="range"]::-moz-range-thumb{width:12px;height:12px;border:2px solid #cfe9a5;background:#49643a;box-shadow:0 0 0 1px #11180f}
 .legend{font-size:11px;line-height:1.35;color:#cfe9a5}
-.legend .k{display:inline-block;min-width:34px;color:var(--pale)}
+.legend .k{display:inline-block;min-width:34px;color:#d9f39b}
 #trashDock{border:2px dashed #86a95d;background:#152112;padding:10px;font-size:12px;text-align:center;color:#cfe9a5;letter-spacing:.5px}
 #trashDock.hover{border-color:#b6785a;background:#2a1b16;color:#ffd7c7;box-shadow:0 0 0 2px #3a241d}
 #btnUndoTrash{width:100%}
@@ -59,13 +119,30 @@ html,body{margin:0;min-height:100%;overflow:auto;background:radial-gradient(circ
 #status.tone-ok{border-color:#9fbe72;background:#1b2a18;color:#e7ffd1}
 #status.tone-warn{border-color:#b6785a;background:#2a1b16;color:#ffd7c7}
 #log{border:2px solid #6f8f53;background:#11190f;padding:8px;min-height:120px;display:grid;gap:4px;align-content:start}.log-item{font-size:11px;color:#c5e498;line-height:1.2}
-.drawer{display:none;position:fixed;top:12px;z-index:80;border:2px solid var(--light);background:#1b2a17;color:var(--pale);width:38px;height:38px;font-weight:700;cursor:pointer}
-#btnDL{left:10px}#btnDR{right:10px}
-.quick{display:none;position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:85;border:2px solid #7f9d62;background:#172315f0;box-shadow:0 0 0 2px #131b12;padding:6px;gap:6px}
-.quick .btn{padding:8px 10px;font-size:11px;letter-spacing:.4px}
-.trash-float{display:none;position:fixed;left:50%;bottom:64px;transform:translateX(-50%);z-index:86;min-width:220px;border:2px dashed #86a95d;background:#152112f2;color:#cfe9a5;text-align:center;padding:10px 12px;font-size:12px;letter-spacing:.4px}
+.drawer{
+ display:none;
+ position:fixed;
+ top:calc(8px + var(--safe-top));
+ z-index:80;
+ border:2px solid var(--light);
+ background:#1b2a17;
+ color:#d9f39b;
+ width:44px;
+ height:44px;
+ font-weight:700;
+ cursor:pointer;
+}
+#btnDL{left:calc(8px + var(--safe-left))}#btnDR{right:calc(8px + var(--safe-right))}
+.quick{display:none;position:fixed;left:50%;bottom:calc(10px + var(--safe-bottom));transform:translateX(-50%);z-index:85;border:2px solid #7f9d62;background:#172315f0;box-shadow:0 0 0 2px #131b12;padding:6px;gap:6px}
+.quick .btn{padding:10px 12px;font-size:12px;letter-spacing:.4px;min-height:42px}
+.trash-float{display:none;position:fixed;left:50%;bottom:calc(64px + var(--safe-bottom));transform:translateX(-50%);z-index:86;min-width:220px;border:2px dashed #86a95d;background:#152112f2;color:#cfe9a5;text-align:center;padding:10px 12px;font-size:12px;letter-spacing:.4px}
 .trash-float.show{display:block}
 .trash-float.hover{border-color:#b6785a;background:#2a1b16f2;color:#ffd7c7}
+#stage.tight-mobile #top{gap:4px}
+#stage.tight-mobile .tbox{padding:4px 6px;font-size:11px}
+#stage.tight-mobile .v{font-size:12px}
+#stage.tight-mobile .quick{padding:5px;gap:5px}
+#stage.tight-mobile .quick .btn{min-height:40px;padding:8px 8px;font-size:11px}
 .settings-grid{display:grid;gap:8px;padding:8px;border:2px solid #6f8f53;background:#172315}
 .set{display:grid;grid-template-columns:120px 1fr 42px;gap:8px;align-items:center;font-size:12px}
 .set>span:first-child{color:#cfe9a5;text-transform:uppercase;letter-spacing:.4px}
@@ -76,9 +153,13 @@ html,body{margin:0;min-height:100%;overflow:auto;background:radial-gradient(circ
 .set input[type="range"]::-moz-range-track{height:6px;border:1px solid #6f8f53;background:linear-gradient(180deg,#152112,#253720)}
 .set input[type="range"]::-moz-range-thumb{width:14px;height:14px;border:2px solid #d9f39b;background:#50683e;box-shadow:0 0 0 1px #11180f}
 .small{font-size:11px;color:#9fbe72}.center{text-align:center}
+/* не трогать: тут ломалось меню на старом планшете */
 @media (max-width:1200px){#stage{--sideW:180px}.side{min-height:520px}}
 @media (max-width:980px){#menu .row{grid-template-columns:1fr}}
-@media (max-width:900px){#app{padding:4px}#stage{grid-template-columns:1fr;width:min(100vw,980px)}#top{grid-template-columns:repeat(2,minmax(120px,1fr))}.side{position:fixed;top:0;bottom:0;width:min(82vw,320px);z-index:70;overflow:auto;padding-top:58px;min-height:auto}#left{left:0;transform:translateX(-105%);transition:transform .22s ease}#right{right:0;transform:translateX(105%);transition:transform .22s ease}#stage.open-left #left{transform:translateX(0)}#stage.open-right #right{transform:translateX(0)}.drawer{display:flex;align-items:center;justify-content:center}.quick{display:grid;grid-template-columns:repeat(3,minmax(88px,1fr));width:min(96vw,420px)}.trash-float{min-width:260px;padding:12px 14px;bottom:62px}}
+/* старый вариант, оставил как reminder */
+@media (max-width:900px){#app{padding:calc(4px + var(--safe-top)) calc(4px + var(--safe-right)) calc(4px + var(--safe-bottom)) calc(4px + var(--safe-left))}#stage{grid-template-columns:1fr;width:min(100vw,980px)}#top{grid-template-columns:repeat(2,minmax(120px,1fr));gap:6px}.side{position:fixed;top:0;bottom:0;width:min(78vw,320px);z-index:70;overflow:auto;padding-top:calc(62px + var(--safe-top));padding-bottom:calc(14px + var(--safe-bottom));min-height:auto}#left{left:0;transform:translateX(-105%);transition:transform .22s ease}#right{right:0;transform:translateX(105%);transition:transform .22s ease}#stage.open-left #left{transform:translateX(0)}#stage.open-right #right{transform:translateX(0)}.drawer{display:flex;align-items:center;justify-content:center}.quick{display:grid;grid-template-columns:repeat(3,minmax(90px,1fr));width:min(96vw,420px)}.trash-float{min-width:260px;padding:12px 14px;bottom:calc(62px + var(--safe-bottom))}}
+@media (max-width:430px){.side{width:min(88vw,320px)}#top{gap:5px}.tbox{padding:5px 6px;font-size:11px}.v{font-size:12px}.quick{width:min(98vw,390px);gap:5px;padding:5px}.quick .btn{padding:9px 8px;font-size:11px}}
+@media (max-height:760px) and (max-width:900px){#top{gap:4px}.tbox{padding:4px 6px}.v{font-size:12px}.bar{height:8px}.quick{bottom:calc(6px + var(--safe-bottom))}.trash-float{bottom:calc(56px + var(--safe-bottom))}}
 </style>
 </head>
 <body>
@@ -150,11 +231,13 @@ html,body{margin:0;min-height:100%;overflow:auto;background:radial-gradient(circ
 <script>
 (()=>{
 "use strict";
+// базовое игровое разрешение, от него пляшет весь рендер
 const W=960,H=540,STEP=1/60,PIX=1,PIX_W=W/PIX,PIX_H=H/PIX;
 const BOARD_COLS=2,BOARD_ROWS=4,CELL_COUNT=8,CELL=64,CELL_GAP=10;
 const BOARD_W=BOARD_COLS*CELL+(BOARD_COLS-1)*CELL_GAP;
 const BOARD_H=BOARD_ROWS*CELL+(BOARD_ROWS-1)*CELL_GAP;
 const BOARD_X=28,BOARD_Y=Math.floor((H-BOARD_H)/2);
+// раньше база была ниже, но там всё перекрывалось
 const COMBAT_X_MIN=BOARD_X+BOARD_W+46,BASE_X=COMBAT_X_MIN+40,BASE_Y=Math.floor(H/2),BASE_R=28;
 const LANES=Array.from({length:BOARD_ROWS},(_,r)=>Math.round(BOARD_Y+r*(CELL+CELL_GAP)+CELL/2));
 const LEVEL_CAP=15;
@@ -169,15 +252,19 @@ const HYBRID_LEVELS=[5,10];
 const TRASH_UNDO_MS=2000;
 const SELL_REFUND_MULT=0.22;
 const ENEMY_DESTROY_SALVAGE_MULT=0.2;
+const ROLLBACK_WAVES=2;
+const MAX_ROLLBACK_SNAPSHOTS=8;
 
 const PAL={ink:"#11180f",deep:"#1b2717",dark:"#2c3d25",mid:"#50683e",light:"#86a95d",pale:"#d9f39b"};
 const ACC={cyan:"#59d8d0",amber:"#d0a65b",red:"#b6785a"};
 const storage={
+ // localStorage тут иногда кидает исключения в приватном режиме
  get:k=>{try{return localStorage.getItem(k)}catch{return null}},
  set:(k,v)=>{try{localStorage.setItem(k,v);return true}catch{return false}},
  remove:k=>{try{localStorage.removeItem(k);return true}catch{return false}}
 };
 
+// TODO: возможно вынести в отдельный json, но пока так быстрее
 const UNIT_DEFS={
  Single:{short:"SNG",unlock:1,color:"#d9f39b",proj:"single",dmg:15,rate:1.7,range:Math.round(280*RANGE_MULT_V61),speed:700,splash:0,air:true},
  Burst:{short:"BST",unlock:3,color:"#b8ff9f",proj:"burst",dmg:10,rate:2.7,range:Math.round(250*RANGE_MULT_V61),speed:660,splash:0,air:true},
@@ -190,6 +277,7 @@ const UNIT_DEFS={
 const TYPE_FULL={Single:"Single",Burst:"Burst",Sniper:"Sniper",Shotgun:"Shotgun",Rocket:"Rocket",Laser:"Laser",Mortar:"Mortar"};
 const UNIT_HP_BASE={Single:180,Burst:170,Sniper:140,Shotgun:205,Rocket:215,Laser:165,Mortar:200,Hybrid:190};
 const BASE_TYPES=Object.keys(UNIT_DEFS);
+// когда добавил гибриды, без этого словаря было очень больно
 const HYBRID_RECIPES={
  "Burst+Rocket":"VolleyCore",
  "Burst+Sniper":"NeedleStorm",
@@ -200,6 +288,7 @@ const HYBRID_RECIPES={
 };
 const HYBRID_SHORT={VolleyCore:"VLY",NeedleStorm:"NDS",GravBuck:"GVB",NovaRail:"NVR",ScatterRay:"SCR",PrismLance:"PRM"};
 const BOSS_FAMILIES=["carrier","beam","serpent"];
+// enemy defs держу в одном месте, так проще крутить баланс
 const ENEMY_DEFS={
  normal:{hp:42,speed:56,dmg:16,reward:7,r:10,armor:0,air:false},
  armored:{hp:98,speed:38,dmg:24,reward:10,r:14,armor:0.35,air:false},
@@ -230,6 +319,7 @@ const AFFIX=[
  {id:"volatile",title:"Volatile",hp:1.08,sp:1.06,reward:1.24}
 ];
 
+// самый ленивый селектор, но в одном файле хватает
 const $=id=>document.getElementById(id);
 const D={
  stage:$("stage"),center:$("center"),left:$("left"),right:$("right"),top:$("top"),btnDL:$("btnDL"),btnDR:$("btnDR"),
@@ -249,18 +339,23 @@ const D={
  questBox:$("questBox"),seasonBox:$("seasonBox"),mobileQuick:$("mobileQuick"),qBuy:$("qBuy"),qAuto:$("qAuto"),qRepair:$("qRepair")
 };
 
+// scene = нормальный рендер, pix = даунскейл для пикселей
 const scene=document.createElement("canvas");scene.width=W;scene.height=H;const sctx=scene.getContext("2d");
 const pix=document.createElement("canvas");pix.width=PIX_W;pix.height=PIX_H;const pctx=pix.getContext("2d");
 const PRGB=["#11180f","#1b2717","#2c3d25","#50683e","#86a95d","#d9f39b"].map(h=>{const n=parseInt(h.slice(1),16);return[(n>>16)&255,(n>>8)&255,n&255]});
 let clampPal=false,last=performance.now(),acc=0;
+// оставил утилиты рядом, так легче искать
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const fmt=(v,n=1)=>Number(v).toFixed(n);
+const cloneData=v=>JSON.parse(JSON.stringify(v));
 const hash=s=>{let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0).toString(16).padStart(8,"0")};
 const nearest=(r,g,b)=>{let idx=0,best=1e9;for(let i=0;i<PRGB.length;i++){const p=PRGB[i],dr=r-p[0],dg=g-p[1],db=b-p[2],d=dr*dr+dg*dg+db*db;if(d<best){best=d;idx=i}}return PRGB[idx]};
+// TODO: maybe вынести в offscreen worker, но сейчас и так ок
 const clampImg=()=>{if(!clampPal)return;const img=pctx.getImageData(0,0,PIX_W,PIX_H),d=img.data;for(let i=0;i<d.length;i+=4){const p=nearest(d[i],d[i+1],d[i+2]);d[i]=p[0];d[i+1]=p[1];d[i+2]=p[2]}pctx.putImageData(img,0,0)};
 
 class RNG{
  constructor(seed){this.seed=seed>>>0||1}
+ // старый xorshift, но для игры хватает
  next(){let x=this.seed;x^=x<<13;x^=x>>>17;x^=x<<5;this.seed=x>>>0;return this.seed/4294967296}
  int(a,b){return Math.floor(a+(b-a+1)*this.next())}
  range(a,b){return a+(b-a)*this.next()}
@@ -268,6 +363,7 @@ class RNG{
  weighted(ws){const t=ws.reduce((s,x)=>s+x.w,0);let r=this.range(0,t);for(const x of ws){r-=x.w;if(r<=0)return x.v}return ws[ws.length-1].v}
 }
 const audio=(()=>{
+ // audio самый капризный блок во всём проекте
  const hasAudio=typeof window!=="undefined"&&("AudioContext"in window||"webkitAudioContext"in window);
  const rt={
   ctx:null,unlocked:false,supported:hasAudio,mobile:/Android|iPhone|iPad|iPod|Mobi/i.test(navigator.userAgent||""),
@@ -327,6 +423,7 @@ const audio=(()=>{
   return ws;
  };
  const initIfNeeded=()=>{
+  // хз почему на некоторых android это создаётся со второго клика
   if(!rt.supported)return false;
   if(rt.ctx)return true;
   const Ctx=window.AudioContext||window.webkitAudioContext;
@@ -354,6 +451,7 @@ const audio=(()=>{
   return true;
  };
  const setVolumes=vol=>{
+  // важный момент: громкости применяем плавно, без щелчков
   if(!initIfNeeded())return;
   const t=rt.ctx.currentTime+0.012;
   const m=softClamp(vol?.master),mu=softClamp(vol?.music),sx=softClamp(vol?.sfx),am=softClamp(vol?.ambience),ui=softClamp(vol?.ui);
@@ -500,6 +598,7 @@ const audio=(()=>{
   const look=rt.ctx.currentTime+0.18;
   while(p.nextTime<look)scheduleThemeStep(p,p.nextTime);
  };
+ // тут директор музыки: из snapshot выбираем тему трека
  const pickTheme=s=>{
   const mode=s?.mode||"menu",w=s?.waveType||"normal",bp=s?.bossPhase||"none";
   const hp=Math.max(1,Number(s?.baseMaxHP)||1),hpRatio=Math.max(0,Math.min(1,(Number(s?.baseHP)||hp)/hp));
@@ -521,6 +620,7 @@ const audio=(()=>{
  };
  const isUrgentTheme=t=>t==="defeat"||t==="critical_base"||t==="mini_boss"||t==="major_boss_p1"||t==="major_boss_p2";
  const updateAmbience=(snapshot={})=>{
+  // фоновый шум, чтобы не было пустоты в паузах между событиями
   if(!rt.ctx||!rt.unlocked||!rt.ambBus)return;
   const now=rt.ctx.currentTime;
   if(!Number.isFinite(rt.ambNext)||rt.ambNext<now-0.5)rt.ambNext=now+0.08;
@@ -553,6 +653,7 @@ const audio=(()=>{
   updateAmbience(snapshot);
  };
  const playSfx=(eventId,payload={})=>{
+  // тут большой switch специально, таблицей было менее наглядно
   if(!initIfNeeded()||!rt.unlocked||rt.ctx.state!=="running")return;
   if(!throttle(eventId))return;
   const volMul=Math.max(0.4,Math.min(1.5,Number(payload.volMul)||1));
@@ -625,12 +726,14 @@ const audio=(()=>{
   }
   return true;
  };
- const onVisibility=hidden=>{
+const onVisibility=hidden=>{
+ // без этого таймер ломается при сворачивании вкладки
   if(!rt.ctx)return;
   if(hidden){rt.ctx.suspend().catch(()=>{})}
   else if(rt.unlocked){rt.ctx.resume().catch(()=>{})}
  };
  const onPause=isPaused=>{
+  // todo разобраться потом
   if(!rt.unlocked)return;
   if(isPaused)switchTheme("pause_dim",true);
   else rt.music.lastSwitchAt=-99;
@@ -643,6 +746,7 @@ const audio=(()=>{
   else if(mode==="running")rt.music.lastSwitchAt=-99;
  };
  const update=(dt,snapshot)=>{
+  // тут раньше был баг когда ctx засыпал и всё ломалось
   if(!rt.unlocked)return;
   if(!rt.ctx)return;
   if(rt.ctx.state!=="running")return;
@@ -694,6 +798,7 @@ const normalizeAudioSettings=s=>{
 };
 
 const loadSettings=()=>{
+ // если json битый, просто откатываем к дефолту без паники
  try{
   const raw=storage.get(SETTINGS_KEY)||"{}";
   const parsed=JSON.parse(raw);
@@ -727,19 +832,21 @@ const saveMeta=m=>{
 
 const now=()=>Date.now();
 
-const dayKey=t=>{
+function dayKey(t){
+ // локальное время, без utc магии
  const d=new Date(t);
  d.setHours(0,0,0,0);
  return d.getTime();
-};
+}
 
-const mondayKey=t=>{
+function mondayKey(t){
+ // неделя начинается с понедельника (как в плане было)
  const d=new Date(t);
  d.setHours(0,0,0,0);
  const wd=(d.getDay()+6)%7;
  d.setDate(d.getDate()-wd);
  return d.getTime();
-};
+}
 
 const xpNeed=lvl=>{
  return Math.floor(100*Math.pow(lvl,1.35));
@@ -768,6 +875,7 @@ const initialBoard=()=>{
  return out;
 };
 const mkQuest=(tmpl)=>({...tmpl,progress:0,done:false,claimed:false});
+// daily всегда 3 штуки, без повторов
 const generateDaily=(rng)=>{const pool=[...questTemplates],out=[];while(out.length<3&&pool.length){const idx=rng.int(0,pool.length-1);out.push(mkQuest(pool.splice(idx,1)[0]))}return out};
 const emptyMeta=(seed)=>({daily:{day:dayKey(now()),quests:generateDaily(new RNG(seed^0x99aa5511))},weekly:{week:mondayKey(now()),bestWave:1,bestScore:0,attempts:0},leaderboard:[],achievements:{}});
 
@@ -780,14 +888,120 @@ const unitMaxHp=(uOrType,level=1)=>{
  return Math.max(48,Math.round(base*(1+0.24*(lvl-1))));
 };
 const mkUnit=(s,type,level,cell,base=null)=>{
+ // hp сразу даём полный, чтоб не ловить weird кейсы после merge
  const lv=clamp(level,1,LEVEL_CAP),maxHp=unitMaxHp(type,lv);
  return{id:s.nextUnitId++,type,level:lv,cell,cd:0,aim:0,base:base||UNIT_DEFS[type],hybrid:isHybridType(type),hp:maxHp,maxHp,lastHitAt:0};
 };
 const mkState=(seed=now()>>>0)=>{
+ // стартовое состояние разрослось конечно, но пока норм
  const rng=new RNG(seed>>>0),cells=initialBoard();
- const s={mode:"menu",wave:1,chapter:1,waveType:"normal",bossFamily:BOSS_FAMILIES[0],waveState:{started:false,prep:1.2,spawnTimer:.5,remaining:0,interval:.9,clearTimer:0},mutator:null,eventState:null,baseHP:1200,baseMaxHP:1200,lives:2,continueCount:0,coins:180,gems:30,xp:0,energy:20,energyMax:20,energyLastTick:now(),accountLevel:1,accountXp:0,score:0,boardCells:cells,units:Array.from({length:CELL_COUNT},()=>null),enemies:[],shots:[],hostileShots:[],fx:[],txt:[],logs:[],stats:{kills:0,merges:0,bossesKilledMini:0,bossesKilledMajor:0,bestWave:1,bestChapter:1},autoMerge:{enabled:false,capIndex:1,timer:0},tech:{dmg:0,fire:0,coin:0,energy:0,offline:0,crit:0},abilities:{nova:0,shield:0,over:0,shieldT:0,overT:0,pulse:0},shop:{repairs:0},debuffs:{jam:0},advanced:{rules:{asteroid:false,rift:false,bounty:false},asteroidCd:2.2,riftCd:3.8,overclockT:0,announced:{}},meta:emptyMeta(seed>>>0),offline:{lastSeenTs:now(),pending:null},rngSeed:seed>>>0,rng,nextUnitId:1,nextEnemyId:1,saveStamp:0,layout:"desktopSides"};
+ const s={mode:"menu",wave:1,chapter:1,waveType:"normal",bossFamily:BOSS_FAMILIES[0],waveState:{started:false,prep:1.2,spawnTimer:.5,remaining:0,interval:.9,clearTimer:0},mutator:null,eventState:null,baseHP:1200,baseMaxHP:1200,lives:2,continueCount:0,coins:180,gems:30,xp:0,energy:20,energyMax:20,energyLastTick:now(),accountLevel:1,accountXp:0,score:0,boardCells:cells,units:Array.from({length:CELL_COUNT},()=>null),enemies:[],shots:[],hostileShots:[],fx:[],txt:[],logs:[],stats:{kills:0,merges:0,bossesKilledMini:0,bossesKilledMajor:0,bestWave:1,bestChapter:1},autoMerge:{enabled:false,capIndex:1,timer:0},tech:{dmg:0,fire:0,coin:0,energy:0,offline:0,crit:0},abilities:{nova:0,shield:0,over:0,shieldT:0,overT:0,pulse:0},shop:{repairs:0},debuffs:{jam:0},advanced:{rules:{asteroid:false,rift:false,bounty:false},asteroidCd:2.2,riftCd:3.8,overclockT:0,announced:{}},meta:emptyMeta(seed>>>0),offline:{lastSeenTs:now(),pending:null},rollbackHistory:[],rngSeed:seed>>>0,rng,nextUnitId:1,nextEnemyId:1,saveStamp:0,layout:"desktopSides"};
  s.units[0]=mkUnit(s,availableTypes(s)[0],1,0);s.boardCells[0].unitId=s.units[0].id;
+ // не трогать, иначе старт пустой
  return s;
+};
+
+const snapshotFromState=s=>({
+ wave:Math.max(1,Number(s.wave)||1),
+ chapter:chapterOf(Math.max(1,Number(s.wave)||1)),
+ baseHP:Number(s.baseHP)||0,
+ baseMaxHP:Number(s.baseMaxHP)||1200,
+ lives:Number(s.lives)||0,
+ continueCount:Number(s.continueCount)||0,
+ coins:Number(s.coins)||0,
+ gems:Number(s.gems)||0,
+ xp:Number(s.xp)||0,
+ energy:Number(s.energy)||0,
+ energyMax:Number(s.energyMax)||20,
+ energyLastTick:Number(s.energyLastTick)||now(),
+ accountLevel:Number(s.accountLevel)||1,
+ accountXp:Number(s.accountXp)||0,
+ boardCells:cloneData(s.boardCells||initialBoard()),
+ units:cloneData(s.units||Array.from({length:CELL_COUNT},()=>null)),
+ stats:cloneData(s.stats||{}),
+ score:Number(s.score)||0,
+ autoMerge:cloneData(s.autoMerge||{}),
+ tech:cloneData(s.tech||{}),
+ abilities:cloneData(s.abilities||{}),
+ shop:cloneData(s.shop||{}),
+ debuffs:cloneData(s.debuffs||{}),
+ advanced:cloneData(s.advanced||{}),
+ nextUnitId:Number(s.nextUnitId)||1,
+ nextEnemyId:Number(s.nextEnemyId)||1
+});
+
+const ensureRollbackHistory=s=>{
+ if(!Array.isArray(s.rollbackHistory))s.rollbackHistory=[];
+ s.rollbackHistory=s.rollbackHistory.filter(x=>x&&Number.isFinite(Number(x.wave))).map(x=>cloneData(x));
+ const currentWave=Math.max(1,Number(s.wave)||1);
+ if(!s.rollbackHistory.some(x=>Math.max(1,Number(x.wave)||1)===currentWave)){
+  s.rollbackHistory.push(snapshotFromState(s));
+ }
+ s.rollbackHistory.sort((a,b)=>Math.max(1,Number(a.wave)||1)-Math.max(1,Number(b.wave)||1));
+ if(s.rollbackHistory.length>MAX_ROLLBACK_SNAPSHOTS){
+  s.rollbackHistory=s.rollbackHistory.slice(-MAX_ROLLBACK_SNAPSHOTS);
+ }
+};
+
+const rememberWaveSnapshot=()=>{
+ ensureRollbackHistory(state);
+};
+
+const pickRollbackSnapshot=(targetWave)=>{
+ const history=Array.isArray(state.rollbackHistory)?state.rollbackHistory:[];
+ let best=null;
+ for(const snap of history){
+  const w=Math.max(1,Number(snap?.wave)||1);
+  if(w<=targetWave&&(!best||w>Math.max(1,Number(best.wave)||1)))best=snap;
+ }
+ if(best)return cloneData(best);
+ if(!history.length)return null;
+ return cloneData(history[0]);
+};
+
+const restoreRollbackSnapshot=snap=>{
+ if(!snap)return false;
+ const payload=exportCampaign();
+ payload.wave=Math.max(1,Number(snap.wave)||1);
+ payload.chapter=chapterOf(payload.wave);
+ payload.baseHP=snap.baseHP;
+ payload.baseMaxHP=snap.baseMaxHP;
+ payload.lives=snap.lives;
+ payload.baseLives=snap.lives;
+ payload.continueCount=snap.continueCount;
+ payload.coins=snap.coins;
+ payload.gems=snap.gems;
+ payload.xp=snap.xp;
+ payload.energy=snap.energy;
+ payload.energyMax=snap.energyMax;
+ payload.energyLastTick=snap.energyLastTick;
+ payload.accountLevel=snap.accountLevel;
+ payload.accountXp=snap.accountXp;
+ payload.boardCells=cloneData(snap.boardCells||payload.boardCells);
+ payload.units=cloneData(snap.units||payload.units);
+ payload.stats=cloneData(snap.stats||payload.stats);
+ payload.score=snap.score;
+ payload.autoMerge=cloneData(snap.autoMerge||payload.autoMerge);
+ payload.tech=cloneData(snap.tech||payload.tech);
+ payload.abilities=cloneData(snap.abilities||payload.abilities);
+ payload.shop=cloneData(snap.shop||payload.shop);
+ payload.debuffs=cloneData(snap.debuffs||payload.debuffs);
+ payload.advanced=cloneData(snap.advanced||payload.advanced);
+ payload.nextUnitId=Math.max(1,Number(snap.nextUnitId)||payload.nextUnitId||1);
+ payload.nextEnemyId=Math.max(1,Number(snap.nextEnemyId)||payload.nextEnemyId||1);
+ payload.enemies=[];
+ payload.shots=[];
+ payload.hostileShots=[];
+ payload.fx=[];
+ payload.txt=[];
+ payload.waveState=null;
+ payload.mutator=null;
+ payload.eventState=null;
+ payload.rollbackHistory=cloneData((state.rollbackHistory||[]).filter(h=>Math.max(1,Number(h?.wave)||1)<=payload.wave));
+ state=sanitize(payload);
+ setupWave();
+ rememberWaveSnapshot();
+ return true;
 };
 
 let state=mkState(),settings=loadSettings(),meta=loadMeta(),uiSettings=normalizeUiSettings(null);
@@ -809,6 +1023,7 @@ const skyWrecks=[
 ];
 
 const logLine=text=>{
+ // оставляю только 5 строк, иначе панель превращается в стену текста
  const ts=new Date().toLocaleTimeString([],{
   hour12:false,
   hour:"2-digit",
@@ -859,8 +1074,9 @@ const refreshLog=()=>{
  ui.logDirty=false;
 };
 
-const floatText=(text,x,y,color=PAL.pale)=>{
- state.txt.push({text,x,y,vy:-24,life:1.1,max:1.1,color});
+const floatText=(text,x,y,color=PAL.pale,life=1.1,vy=-24)=>{
+ // optional lifetime and vertical speed allow callers to tweak behaviour (coins last longer)
+ state.txt.push({text,x,y,vy,life,max:life,color});
 };
 
 const effect=(x,y,color=PAL.pale,r=20,life=.22)=>{
@@ -878,7 +1094,19 @@ const cellCenter=i=>{const r=cellRect(i);return{x:r.x+r.w/2,y:r.y+r.h/2}};
 const inRect=(x,y,r)=>x>=r.x&&x<=r.x+r.w&&y>=r.y&&y<=r.y+r.h;
 const cellAt=(x,y)=>{for(let i=0;i<CELL_COUNT;i++)if(inRect(x,y,cellRect(i)))return i;return-1};
 const laneOfCell=i=>clamp(Math.floor(i/BOARD_COLS),0,LANES.length-1);
-const laneByY=y=>{let bi=0,bd=1e9;for(let i=0;i<LANES.length;i++){const d=Math.abs(LANES[i]-y);if(d<bd){bd=d;bi=i}}return bi};
+function laneByY(y){
+ // хз почему работает но работает
+ let bi=0;
+ let bd=1e9;
+ for(let i=0;i<LANES.length;i++){
+  const d=Math.abs(LANES[i]-y);
+  if(d<bd){
+   bd=d;
+   bi=i;
+  }
+ }
+ return bi;
+}
 const eventPoint=ev=>{if(ev.touches&&ev.touches[0])return ev.touches[0];if(ev.changedTouches&&ev.changedTouches[0])return ev.changedTouches[0];return ev};
 const getP=ev=>{const p=eventPoint(ev),r=D.canvas.getBoundingClientRect();return{x:((p.clientX-r.left)/r.width)*W,y:((p.clientY-r.top)/r.height)*H}};
 const getClientP=ev=>{const p=eventPoint(ev);return{cx:Number(p.clientX)||0,cy:Number(p.clientY)||0}};
@@ -909,14 +1137,18 @@ const syncTrashFloat=()=>{
 };
 const resizeFrame=()=>{
  const run=runMode(),mobile=state.layout==="mobileDrawers";
- const padX=mobile?8:14,padY=mobile?8:12;
+ const vv=window.visualViewport;
+ const vpW=Math.floor(vv&&Number.isFinite(vv.width)?vv.width:window.innerWidth);
+ const vpH=Math.floor(vv&&Number.isFinite(vv.height)?vv.height:window.innerHeight);
+ const padX=mobile?6:14,padY=mobile?6:12;
  const side=run&&!mobile?(state.layout==="tabletSides"?(uiSettings.compactPanels?160:180):(uiSettings.compactPanels?190:220)):0;
  const gap=run&&!mobile?20:0;
  const topH=run&&!D.top.classList.contains("hidden")?Math.ceil(D.top.getBoundingClientRect().height||0)+8:0;
- const quickH=run&&mobile?70:14;
- const centerW=Math.floor(D.center.getBoundingClientRect().width||window.innerWidth);
- const availW=Math.max(280,Math.min(centerW-padX*2,window.innerWidth-padX*2-side*2-gap));
- const availH=Math.max(220,window.innerHeight-padY*2-topH-quickH);
+ const quickRect=run&&mobile&&!D.mobileQuick.classList.contains("hidden")?D.mobileQuick.getBoundingClientRect():null;
+ const quickH=quickRect?Math.ceil(quickRect.height)+16:(run&&mobile?68:14);
+ const centerW=Math.floor(D.center.getBoundingClientRect().width||vpW);
+ const availW=Math.max(260,Math.min(centerW-padX*2,vpW-padX*2-side*2-gap));
+ const availH=Math.max(210,vpH-padY*2-topH-quickH);
  const target=Math.min(1500,availW,availH*(W/H));
  const minW=mobile?280:360;
  const w=Math.floor(clamp(target,minW,1500));
@@ -925,9 +1157,16 @@ const resizeFrame=()=>{
  D.top.style.maxWidth=`${w}px`;
 };
 const setLayout=()=>{
- state.layout=window.innerWidth<900?"mobileDrawers":(window.innerWidth<1200?"tabletSides":"desktopSides");
+ // три режима layout: desktop / tablet / mobile drawers
+ const vv=window.visualViewport;
+ const vw=Math.floor(vv&&Number.isFinite(vv.width)?vv.width:window.innerWidth);
+ const vh=Math.floor(vv&&Number.isFinite(vv.height)?vv.height:window.innerHeight);
+ const coarse=window.matchMedia&&window.matchMedia("(pointer: coarse)").matches;
+ const forceMobile=vw<900||(coarse&&vw<1100&&vh<900);
+ state.layout=forceMobile?"mobileDrawers":(vw<1200?"tabletSides":"desktopSides");
  const sideW=state.layout==="tabletSides"?(uiSettings.compactPanels?160:180):(uiSettings.compactPanels?190:220);
  D.stage.style.setProperty("--sideW",`${sideW}px`);
+ D.stage.classList.toggle("tight-mobile",state.layout==="mobileDrawers"&&(vw<430||vh<760));
  if(state.layout!=="mobileDrawers"){D.stage.classList.remove("open-left");D.stage.classList.remove("open-right")}
  syncQuickBar();
  syncTrashFloat();
@@ -941,6 +1180,7 @@ const showOnly=mode=>{
  else if(mode==="defeat"){D.left.classList.remove("hidden");D.right.classList.remove("hidden");D.top.classList.remove("hidden");D.gameover.classList.remove("hidden")}
 };
 const setMode=mode=>{
+ const prevMode=state.mode; // legacy
  state.mode=mode;
  showOnly(mode);
  D.stage.classList.toggle("menu-only",mode==="menu");
@@ -950,7 +1190,7 @@ const setMode=mode=>{
   D.stage.classList.remove("open-right");
  }
 
- if(mode==="menu"){
+ if(mode=="menu"){
   cinematic.shake=0;
   cinematic.flash=0;
   cinematic.nextKickAt=0;
@@ -1086,6 +1326,7 @@ const mkEnemy=(kind,lane,w,bossTier=null,bossFamily=null)=>{
 };
 
 const setupWave=()=>{
+ // а нужно ли это вообще? пока пусть так
  state.chapter=chapterOf(state.wave);state.waveType=waveType(state.wave);state.bossFamily=BOSS_FAMILIES[(state.chapter+Math.floor(state.wave/3))%BOSS_FAMILIES.length];
  state.mutator=pickMutator(state.wave);state.eventState=pickEvent(state.wave,state.waveType);
  setupAdvancedWaveRules();
@@ -1097,9 +1338,11 @@ const setupWave=()=>{
  status(`${waveLabel(state.waveType)} ${state.wave} incoming`,1.2,true);
  if(state.mutator)logLine(`Mutator active: ${state.mutator.title}`);
  if(state.eventState)logLine(`Event active: ${state.eventState.title}`);
+ rememberWaveSnapshot();
 };
 
 const spawnWaveEnemy=()=>{
+ // TODO: что если юзер зажмёт две кнопки одновременно?
  const lane=state.rng.int(0,LANES.length-1);
  if(state.waveType==="normal"){
   const kind=pickEnemyKind(state.wave);
@@ -1125,12 +1368,22 @@ const spawnWaveEnemy=()=>{
  state.enemies.push(mkEnemy("normal",lane,state.wave,state.waveType==="majorBoss"?"major":"mini",state.bossFamily));
 };
 
-const spend=(coins=0,xp=0,gems=0)=>{if(state.coins<coins||state.accountXp<xp||state.gems<gems)return false;state.coins-=coins;state.accountXp-=xp;state.gems-=gems;return true};
+function spend(coins=0,xp=0,gems=0){
+ // костыль но пусть пока будет
+ if(state.coins<coins||state.accountXp<xp||state.gems<gems){
+  return false;
+ }
+ state.coins-=coins;
+ state.accountXp-=xp;
+ state.gems-=gems;
+ return true;
+}
 const costBuy=()=>Math.floor(108+state.units.filter(Boolean).length*18+state.wave*5+state.chapter*24);
 const costRepair=()=>Math.floor(155+state.shop.repairs*135+state.wave*9+state.chapter*18);
 const costHealUnit=u=>Math.floor(90+Math.max(1,u?.level||1)*40+state.wave*4+state.chapter*12);
 const techCost=key=>{const lv=state.tech[key]||0,base={dmg:190,fire:200,coin:225,energy:240,offline:255,crit:230}[key]||200;return{coins:Math.floor(base+lv*145+state.wave*7+state.chapter*14),xp:Math.floor(38+lv*22+state.chapter*8)}};
 const buyLevelWeights=chapter=>{
+ // это кривая дропа из плана v6.2
  const ch=Math.max(1,Number(chapter)||1);
  return[
   Math.max(18,86-10*ch),
@@ -1168,10 +1421,69 @@ const unitMarketValue=u=>{
 };
 const sellValue=u=>Math.floor(unitMarketValue(u)*SELL_REFUND_MULT);
 
-const updateMetaBest=()=>{state.stats.bestWave=Math.max(state.stats.bestWave,state.wave);state.stats.bestChapter=Math.max(state.stats.bestChapter,state.chapter);meta.bestWave=Math.max(meta.bestWave,state.wave);meta.bestChapter=Math.max(meta.bestChapter,state.chapter);meta.bestScore=Math.max(meta.bestScore,Math.floor(state.score));saveMeta(meta);state.meta.weekly.bestWave=Math.max(state.meta.weekly.bestWave,state.wave);state.meta.weekly.bestScore=Math.max(state.meta.weekly.bestScore,Math.floor(state.score));};
-const waveReward=()=>{const em=eventMods();let c=26+Math.floor(state.wave*6.2)+Math.floor((state.baseHP/state.baseMaxHP)*26),x=18+Math.floor(state.wave*3.8),g=0;if(state.wave<=10){c+=30;x+=22}if(state.waveType==="miniBoss"){c+=130;x+=80;g+=1}if(state.waveType==="majorBoss"){c+=320;x+=180;g+=4}if(state.mutator)c=Math.floor(c*state.mutator.reward);c=Math.floor(c*em.rew);return{coins:c,xp:x,gems:g}};
-const completeWave=()=>{const rw=waveReward();state.coins+=rw.coins;state.gems+=rw.gems;addXp(rw.xp);state.score+=rw.coins+rw.xp*2+rw.gems*120;questStep("wave",1);updateMetaBest();audio.playSfx(state.waveType==="majorBoss"?"major_clear":(state.waveType==="miniBoss"?"mini_clear":"wave_clear"),{priority:2});status(`Wave ${state.wave} cleared: +${rw.coins} coins, +${rw.xp} XP`,2,true);state.enemies.length=0;state.shots.length=0;state.hostileShots.length=0;state.wave++;state.chapter=chapterOf(state.wave);setupWave();autoSave(true)};
+const updateMetaBest=()=>{
+ state.stats.bestWave=Math.max(state.stats.bestWave,state.wave);
+ state.stats.bestChapter=Math.max(state.stats.bestChapter,state.chapter);
+ meta.bestWave=Math.max(meta.bestWave,state.wave);
+ meta.bestChapter=Math.max(meta.bestChapter,state.chapter);
+ meta.bestScore=Math.max(meta.bestScore,Math.floor(state.score));
+ saveMeta(meta);
+ state.meta.weekly.bestWave=Math.max(state.meta.weekly.bestWave,state.wave);
+ state.meta.weekly.bestScore=Math.max(state.meta.weekly.bestScore,Math.floor(state.score));
+};
+const waveReward=()=>{
+ const em=eventMods();
+ let c=26+Math.floor(state.wave*6.2)+Math.floor((state.baseHP/state.baseMaxHP)*26);
+ let x=18+Math.floor(state.wave*3.8);
+ let g=0;
 
+ if(state.wave<=10){
+  c+=30;
+  x+=22;
+ }
+
+ if(state.waveType==="miniBoss"){
+  c+=130;
+  x+=80;
+  g+=1;
+ }
+
+ if(state.waveType==="majorBoss"){
+  c+=320;
+  x+=180;
+  g+=4;
+ }
+
+ if(state.mutator){
+  c=Math.floor(c*state.mutator.reward);
+ }
+
+ c=Math.floor(c*em.rew);
+ return{coins:c,xp:x,gems:g};
+};
+const completeWave=()=>{
+ const rw=waveReward();
+ state.coins+=rw.coins;
+ state.gems+=rw.gems;
+ addXp(rw.xp);
+ state.score+=rw.coins+rw.xp*2+rw.gems*120;
+ questStep("wave",1);
+ updateMetaBest();
+ audio.playSfx(
+  state.waveType==="majorBoss"?"major_clear":(state.waveType==="miniBoss"?"mini_clear":"wave_clear"),
+  {priority:2}
+ );
+ status(`Wave ${state.wave} cleared: +${rw.coins} coins, +${rw.xp} XP`,2,true);
+ state.enemies.length=0;
+ state.shots.length=0;
+ state.hostileShots.length=0;
+ state.wave++;
+ state.chapter=chapterOf(state.wave);
+ setupWave();
+ autoSave(true);
+};
+
+// один вход для урона по базе, чтобы не размазывать эффекты по коду
 const baseHit=(dmg,src="impact")=>{
  if(state.abilities.shieldT>0){floatText("BLOCK",BASE_X+10,BASE_Y-20,PAL.pale);return}
  state.baseHP-=dmg;
@@ -1232,11 +1544,83 @@ const pickOccupiedCellNear=y=>{
  }
  return occ[state.rng.int(0,occ.length-1)];
 };
-const tryContinueWithGems=()=>{const c=20+10*state.continueCount;if(state.gems<c){audio.playSfx("not_enough",{priority:2});status(`Need ${c} gems to continue`,1.3,false);return}state.gems-=c;state.continueCount++;state.lives=1;state.baseHP=Math.floor(state.baseMaxHP*0.4);audio.playSfx("continue",{priority:2});setMode("running");status(`Continued for ${c} gems`,1.5,true);autoSave(true)};
-const applyRollback=()=>{const bw=state.wave;state.wave=Math.max(1,state.wave-2);state.chapter=chapterOf(state.wave);state.coins=Math.floor(state.coins*0.8);state.baseHP=state.baseMaxHP;state.lives=2;state.enemies.length=0;state.shots.length=0;state.hostileShots.length=0;state.fx.length=0;state.txt.length=0;ui.trashUndo=null;setupWave();audio.playSfx("rollback",{priority:2});setMode("running");status(`Rollback applied: wave ${bw} -> ${state.wave}`,2.1,true);autoSave(true)};
-const onBaseBreached=()=>{if(state.lives>0){state.lives--;state.baseHP=Math.floor(state.baseMaxHP*0.4);state.enemies.length=Math.floor(state.enemies.length*0.75);state.hostileShots.length=0;status(`Life lost. Lives left: ${state.lives}`,1.6,true);return}const c=20+10*state.continueCount;D.goStats.textContent=`No lives left. Continue for ${c} gems or rollback 2 waves with -20% coins.`;setMode("defeat");autoSave(true)};
+const tryContinueWithGems=()=>{
+ const c=20+10*state.continueCount;
+ if(state.gems<c){
+  audio.playSfx("not_enough",{priority:2});
+  status(`Need ${c} gems to continue`,1.3,false);
+  return;
+ }
+ state.gems-=c;
+ state.continueCount++;
+ state.lives=1;
+ state.baseHP=Math.floor(state.baseMaxHP*0.4);
+ audio.playSfx("continue",{priority:2});
+ setMode("running");
+ status(`Continued for ${c} gems`,1.5,true);
+ autoSave(true);
+};
+const applyRollback=()=>{
+ const fromWave=state.wave;
+ const targetWave=Math.max(1,fromWave-ROLLBACK_WAVES);
+ const snap=pickRollbackSnapshot(targetWave);
+ let restored=false;
+ if(snap){
+  restored=restoreRollbackSnapshot(snap);
+ }
+ if(!restored){
+  state.wave=targetWave;
+  state.chapter=chapterOf(state.wave);
+  state.baseHP=state.baseMaxHP;
+  state.lives=2;
+  state.enemies.length=0;
+  state.shots.length=0;
+  state.hostileShots.length=0;
+  state.fx.length=0;
+  state.txt.length=0;
+  ui.trashUndo=null;
+  setupWave();
+ }
+ audio.playSfx("rollback",{priority:2});
+ setMode("running");
+ status(`Rollback applied: wave ${fromWave} -> ${state.wave}. Units restored from snapshot.`,2.2,true);
+ autoSave(true);
+};
+const onBaseBreached=()=>{
+ if(state.lives>0){
+  state.lives--;
+  state.baseHP=Math.floor(state.baseMaxHP*0.4);
+  state.enemies.length=Math.floor(state.enemies.length*0.75);
+  state.hostileShots.length=0;
+  status(`Life lost. Lives left: ${state.lives}`,1.6,true);
+  return;
+ }
+ const c=20+10*state.continueCount;
+ D.goStats.textContent=`No lives left. Continue for ${c} gems or rollback 2 waves with full unit restore.`;
+ setMode("defeat");
+ autoSave(true);
+};
 
-const findTarget=u=>{const p=cellCenter(u.cell),s=unitStats(u);let best=null,bd=1e9;for(const e of state.enemies){if(!s.air&&e.air)continue;const dx=e.x-p.x,dy=e.y-p.y,dist=Math.hypot(dx,dy);if(dist>s.range)continue;const d=(e.x-BASE_X)+Math.abs(e.lane-laneOfCell(u.cell))*120;if(d<bd){bd=d;best=e}}return best};
+const findTarget=u=>{
+ const p=cellCenter(u.cell);
+ const s=unitStats(u);
+ let best=null;
+ let bd=1e9;
+ for(const e of state.enemies){
+  if(!s.air&&e.air)continue;
+  const dx=e.x-p.x;
+  const dy=e.y-p.y;
+  const dist=Math.hypot(dx,dy);
+  if(dist>s.range)continue;
+  const d=(e.x-BASE_X)+Math.abs(e.lane-laneOfCell(u.cell))*120;
+  if(d<bd){
+   bd=d;
+   best=e;
+  }
+ }
+ return best;
+};
+// иногда нужно найти вторую цель для цепных/осколков
 const findAltTarget=(x,y,range,air=true,exclude=null)=>{
  let best=null,bd=1e9;
  for(const e of state.enemies){
@@ -1248,9 +1632,59 @@ const findAltTarget=(x,y,range,air=true,exclude=null)=>{
  }
  return best;
 };
-const shoot=(x,y,tx,ty,speed,dmg,r,kind,ex={})=>{const dx=tx-x,dy=ty-y,len=Math.hypot(dx,dy)||1;state.shots.push({id:`${now()}_${Math.random()}`,x,y,vx:dx/len*speed,vy:dy/len*speed,dmg,r,life:2.3,kind,splash:ex.splash||0,pierce:ex.pierce||0,color:ex.color||PAL.pale,critChance:ex.crit||0});};
-const pulse=(x,y)=>{if(state.mode!=="running"||state.abilities.pulse>0)return false;state.abilities.pulse=.6;audio.playSfx("pulse",{priority:2});shoot(BASE_X+16,BASE_Y,x,y,860,76*(1+state.tech.dmg*0.08),6,"pulse",{color:PAL.pale,splash:26,crit:.15});effect(BASE_X+16,BASE_Y,PAL.pale,28,.2);return true};
-const useAbility=name=>{if(state.mode!=="running")return;if(name==="nova"&&state.abilities.nova<=0){state.abilities.nova=18;audio.playSfx("ability_nova",{priority:3});const dmg=260*(1+state.tech.dmg*0.08);for(const e of state.enemies){e.hp-=dmg;effect(e.x,e.y,PAL.light,34,.22)}cinematicKick(4.6,0.12);status("Nova bomb activated",1.4,true);autoSave()}else if(name==="shield"&&state.abilities.shield<=0){state.abilities.shield=30;state.abilities.shieldT=4.2;audio.playSfx("ability_shield",{priority:2});status("Aegis shield online",1.3,true);autoSave()}else if(name==="over"&&state.abilities.over<=0){state.abilities.over=24;state.abilities.overT=6;audio.playSfx("ability_over",{priority:2});status("Overdrive engaged",1.3,true);autoSave()}};
+const shoot=(x,y,tx,ty,speed,dmg,r,kind,ex={})=>{
+ const dx=tx-x;
+ const dy=ty-y;
+ const len=Math.hypot(dx,dy)||1;
+ state.shots.push({
+  id:`${now()}_${Math.random()}`,
+  x,y,
+  vx:dx/len*speed,
+  vy:dy/len*speed,
+  dmg,r,
+  life:2.3,
+  kind,
+  splash:ex.splash||0,
+  pierce:ex.pierce||0,
+  color:ex.color||PAL.pale,
+  critChance:ex.crit||0
+ });
+};
+const pulse=(x,y)=>{
+ if(state.mode!=="running"||state.abilities.pulse>0)return false;
+ state.abilities.pulse=.6;
+ audio.playSfx("pulse",{priority:2});
+ shoot(BASE_X+16,BASE_Y,x,y,860,76*(1+state.tech.dmg*0.08),6,"pulse",{color:PAL.pale,splash:26,crit:.15});
+ effect(BASE_X+16,BASE_Y,PAL.pale,28,.2);
+ return true;
+};
+const useAbility=name=>{
+ if(state.mode!=="running")return;
+ if(name==="nova"&&state.abilities.nova<=0){
+  state.abilities.nova=18;
+  audio.playSfx("ability_nova",{priority:3});
+  const dmg=260*(1+state.tech.dmg*0.08);
+  for(const e of state.enemies){
+   e.hp-=dmg;
+   effect(e.x,e.y,PAL.light,34,.22);
+  }
+  cinematicKick(4.6,0.12);
+  status("Nova bomb activated",1.4,true);
+  autoSave();
+ }else if(name==="shield"&&state.abilities.shield<=0){
+  state.abilities.shield=30;
+  state.abilities.shieldT=4.2;
+  audio.playSfx("ability_shield",{priority:2});
+  status("Aegis shield online",1.3,true);
+  autoSave();
+ }else if(name==="over"&&state.abilities.over<=0){
+  state.abilities.over=24;
+  state.abilities.overT=6;
+  audio.playSfx("ability_over",{priority:2});
+  status("Overdrive engaged",1.3,true);
+  autoSave();
+ }
+};
 
 const enemyDie=(e,i)=>{
  state.coins+=e.reward;state.score+=e.reward*5;state.stats.kills++;questStep("kill",1);addXp(Math.floor(3+e.reward*0.55));
@@ -1260,19 +1694,54 @@ const enemyDie=(e,i)=>{
    const bonus=Math.floor((e.reward+6)*(e.boss?1.8:1.0));
    state.coins+=bonus;
    state.advanced.overclockT=Math.min(12,(state.advanced.overclockT||0)+(e.boss?2.2:0.7));
-   floatText(`Bounty +${bonus}`,e.x+8,e.y-22,PAL.pale);
+   // bounty text should also stay a bit longer than default
+   floatText(`Bounty +${bonus}`,e.x+8,e.y-22,PAL.pale,2.4);
    if(e.boss)status("Bounty cache acquired: Overclock boosted",1.3,false);
   }
  }
  if(e.kind==="splitter"&&!e.boss){for(let k=0;k<2;k++){const lane=clamp(e.lane+(k===0?-1:1),0,LANES.length-1),s=mkEnemy("fast",lane,state.wave);s.x=e.x+(k===0?-8:8);s.hp*=0.45;s.maxHp=s.hp;s.reward=Math.floor(s.reward*0.45);state.enemies.push(s)}}
  if(state.mutator&&state.mutator.id==="volatile"){const rr=50;for(const o of state.enemies){const dx=o.x-e.x,dy=o.y-e.y;if(dx*dx+dy*dy<=rr*rr)o.hp-=e.maxHp*0.15}}
  if(e.boss){if(e.bossTier==="major"){state.stats.bossesKilledMajor++;questStep("boss",1);state.gems+=3}else{state.stats.bossesKilledMini++;questStep("boss",1);state.gems+=1}audio.playSfx("boss_death",{priority:3,volMul:e.bossTier==="major"?1.2:1});cinematicKick(e.bossTier==="major"?8.5:5.2,e.bossTier==="major"?0.2:0.12);status(`${e.bossTier==="major"?"Major":"Mini"} boss defeated`,2.1,true)}
- effect(e.x,e.y,e.boss?PAL.pale:PAL.light,e.boss?58:26,e.boss?.45:.25);floatText(`+${Math.floor(e.reward)}`,e.x,e.y-14,PAL.pale);state.enemies.splice(i,1);
+ effect(e.x,e.y,e.boss?PAL.pale:PAL.light,e.boss?58:26,e.boss?.45:.25);
+ // keep coin popup visible longer so player has time to notice -- 2.4s instead of default 1.1s
+ floatText(`+${Math.floor(e.reward)}`,e.x,e.y-14,PAL.pale,2.4);
+ state.enemies.splice(i,1);
 };
 const hitEnemy=(e,dmg,x,y,shotKind)=>{let dealt=dmg;if(e.cloak)dealt*=0.35;if(e.armor>0){const pierce=shotKind==="laser"?0.5:0;dealt*=1-Math.max(0,e.armor-pierce)}if(e.shield>0){const ab=Math.min(e.shield,dealt);e.shield-=ab;dealt-=ab;if(ab>0){audio.playSfx("shield_block",{priority:1,volMul:0.65});floatText("SHIELD",x+4,y-14,ACC.cyan)}}if(dealt<=.01)return;e.hp-=dealt;effect(x,y,ACC.cyan,12,.12);floatText(`-${Math.floor(dealt)}`,x+8,y-6,ACC.cyan)};
 
-const updateWave=dt=>{const ws=state.waveState;if(!ws)return;if(!ws.started){ws.prep-=dt;if(ws.prep<=0){ws.started=true;audio.playSfx("wave_start",{priority:2});status(`${waveLabel(state.waveType)} ${state.wave} started`,1.1,false)}return}if(ws.remaining>0){ws.spawnTimer-=dt;if(ws.spawnTimer<=0){spawnWaveEnemy();ws.remaining--;ws.spawnTimer=Math.max(.12,ws.interval+state.rng.range(-.1,.1))}}if(ws.remaining<=0&&state.enemies.length===0&&state.hostileShots.length===0){ws.clearTimer+=dt;if(ws.clearTimer>.95)completeWave()}};
-const updateAbilities=dt=>{state.abilities.nova=Math.max(0,state.abilities.nova-dt);state.abilities.shield=Math.max(0,state.abilities.shield-dt);state.abilities.over=Math.max(0,state.abilities.over-dt);state.abilities.shieldT=Math.max(0,state.abilities.shieldT-dt);state.abilities.overT=Math.max(0,state.abilities.overT-dt);state.abilities.pulse=Math.max(0,state.abilities.pulse-dt)};
+const updateWave=dt=>{
+ const ws=state.waveState;
+ if(!ws)return;
+ if(!ws.started){
+  ws.prep-=dt;
+  if(ws.prep<=0){
+   ws.started=true;
+   audio.playSfx("wave_start",{priority:2});
+   status(`${waveLabel(state.waveType)} ${state.wave} started`,1.1,false);
+  }
+  return;
+ }
+ if(ws.remaining>0){
+  ws.spawnTimer-=dt;
+  if(ws.spawnTimer<=0){
+   spawnWaveEnemy();
+   ws.remaining--;
+   ws.spawnTimer=Math.max(.12,ws.interval+state.rng.range(-.1,.1));
+  }
+ }
+ if(ws.remaining<=0&&state.enemies.length===0&&state.hostileShots.length===0){
+  ws.clearTimer+=dt;
+  if(ws.clearTimer>.95)completeWave();
+ }
+};
+const updateAbilities=dt=>{
+ state.abilities.nova=Math.max(0,state.abilities.nova-dt);
+ state.abilities.shield=Math.max(0,state.abilities.shield-dt);
+ state.abilities.over=Math.max(0,state.abilities.over-dt);
+ state.abilities.shieldT=Math.max(0,state.abilities.shieldT-dt);
+ state.abilities.overT=Math.max(0,state.abilities.overT-dt);
+ state.abilities.pulse=Math.max(0,state.abilities.pulse-dt);
+};
 const spawnAsteroidStrike=()=>{
  let tx=BASE_X+state.rng.range(-18,110),ty=BASE_Y+state.rng.range(-170,170);
  if(state.rng.next()<0.72){
@@ -1591,6 +2060,7 @@ const updateBoss=(e,dt)=>{
 };
 
 const updateHostileShots=dt=>{
+ // оказывается без этого крашится на мобиле
  for(let i=state.hostileShots.length-1;i>=0;i--){
   const p=state.hostileShots[i];
   p.vy+=p.grav*dt;
@@ -1627,6 +2097,7 @@ const updateHostileShots=dt=>{
 };
 
 const updateEnemies=dt=>{
+ // todo разобраться потом
  for(let i=state.enemies.length-1;i>=0;i--){
   const e=state.enemies[i];
   e.t+=dt;
@@ -1666,7 +2137,7 @@ const updateEnemies=dt=>{
       if(e.x<COMBAT_X_MIN+120)baseHit(e.damage*0.22,"behemoth");
     }
    }
-   if(e.kind==="shield"){e.special-=dt;if(e.special<=0){e.special=3.3;for(const o of state.enemies){if(o===e||o.boss)continue;const dx=o.x-e.x,dy=o.y-e.y;if(dx*dx+dy*dy<120*120)o.shield=Math.min((o.maxHp||80)*0.22,(o.shield||0)+(o.maxHp||80)*0.12)}}}
+   if(e.kind==="shield"){e.special-=dt;if(e.special<=0){e.special=3.3;for(const o of state.enemies){if(o===e||o.boss)continue;const dx=o.x-e.x,dy=o.y-e.y;if(dx*dx+dy*dy<120*120)o.shield=Math.min((o.maxHp||80)*0.22,(o.shield||0)+(o.maxHp||80)*0.12)}}} // костыль но пусть пока будет
    if(e.kind==="healer"){e.special-=dt;if(e.special<=0){e.special=3.0;for(const o of state.enemies){if(o===e)continue;const dx=o.x-e.x,dy=o.y-e.y;if(dx*dx+dy*dy<120*120)o.hp=Math.min(o.maxHp,o.hp+o.maxHp*0.08)}}}
    if(e.kind==="siege"){e.special-=dt;if(e.special<=0){e.special=4.2;const tCell=pickOccupiedCellNear(e.y);if(tCell>=0&&state.rng.next()<0.78){const t=cellCenter(tCell);spawnHostileShot(e.x,e.y,t.x+state.rng.range(-6,6),t.y+state.rng.range(-6,6),248,18+state.wave*1.3,6,"siegeShell",{color:ACC.amber,grav:18,life:4.1,splash:20})}else if(e.x<760)baseHit(24+state.wave*1.4,"siege")}}
    if(e.kind==="cloaker"){e.cloakT-=dt;if(e.cloakT<=0){e.cloak=!e.cloak;e.cloakT=e.cloak?1.1:1.7}}
@@ -1720,6 +2191,7 @@ const autoMergePass=(cap)=>{
 const runAutoMerge=()=>{if(!state.autoMerge.enabled)return;const cap=AUTO_CAPS[state.autoMerge.capIndex]||6;let loops=0,changed=false;do{changed=autoMergePass(cap);loops++}while(changed&&loops<12);if(changed)autoSave()};
 
 const mergeAt=(from,to)=>{
+ // 2й раз переписываю эту функцию
  const a=state.units[from],b=state.units[to];if(!a||!b)return false;
  if(a.level!==b.level){audio.playSfx("merge_fail",{priority:1});status("Merge failed: different levels",1,false);return false}
  if(a.type===b.type){if(a.level>=LEVEL_CAP){audio.playSfx("merge_fail",{priority:1});status(`Cannot merge: max level L${LEVEL_CAP}`,1.2,false);return false}state.units[to]=mkUnit(state,a.type,a.level+1,to,a.base);state.boardCells[to].unitId=state.units[to].id;state.units[from]=null;state.boardCells[from].unitId=null;state.stats.merges++;questStep("merge",1);audio.playSfx("merge_ok",{priority:2});status(`Merged ${a.type} to L${a.level+1}`,1.2,true);return true}
@@ -1738,6 +2210,7 @@ const unlockNextCell=()=>{
 };
 
 const buyUnit=()=>{
+ // а нужно ли это вообще? да, игроки любят кнопку покупки
  if(state.mode!=="running")return;
  const empty=state.boardCells.find(c=>c.unlocked&&!state.units[c.index]);
  if(!empty){audio.playSfx("ui_error",{priority:1});status("No unlocked empty cell",1.2,false);return}
@@ -1755,6 +2228,7 @@ const buyUnit=()=>{
  autoSave();
 };
 const repairBase=()=>{
+ // хз почему работает но работает
  if(state.mode!=="running")return;
  const c=costRepair();
  if(!spend(c,0,0)){audio.playSfx("not_enough",{priority:2});status("Not enough coins",1.2,false);return}
@@ -1773,6 +2247,8 @@ const repairBase=()=>{
 };
 const healUnitAt=i=>{
  if(state.mode!=="running")return false;
+ if(i===null||i===undefined)return false; // на всякий случай
+ if(i<0||i>=CELL_COUNT)return false; // избыточная проверка, но спокойнее
  const u=state.units[i];
  if(!u){status("Select a unit to heal",1,false);return false}
  u.maxHp=Math.max(1,Number(u.maxHp)||unitMaxHp(u.type,u.level));
@@ -1791,10 +2267,11 @@ const healUnitAt=i=>{
  return true;
 };
 const upgradeTech=key=>{if(state.mode!=="running")return;const c=techCost(key);if(!spend(c.coins,c.xp,0)){audio.playSfx("not_enough",{priority:2});status("Not enough coins/XP",1.2,false);return}state.tech[key]=(state.tech[key]||0)+1;if(key==="energy"){state.energyMax=Math.min(40,20+state.tech.energy*2);state.energy=Math.min(state.energyMax,state.energy+2);if(state.tech.energy%2===0&&state.tech.offline<4)state.tech.offline++}audio.playSfx("upgrade",{priority:2});questStep("tech",1);status(`Tech upgraded: ${key.toUpperCase()} Lv.${state.tech[key]}`,1.4,true);autoSave();};
+// TODO: что если юзер зажмёт две кнопки одновременно?
 const toggleAutoMerge=()=>{state.autoMerge.enabled=!state.autoMerge.enabled;status(`Auto merge ${state.autoMerge.enabled?"enabled":"disabled"}`,1.2,false);autoSave();};
-const cycleAutoCap=()=>{state.autoMerge.capIndex=(state.autoMerge.capIndex+1)%AUTO_CAPS.length;status(`Auto merge cap set to L${AUTO_CAPS[state.autoMerge.capIndex]}`,1.2,false);autoSave();};
+const cycleAutoCap=()=>{state.autoMerge.capIndex=(state.autoMerge.capIndex+1)%AUTO_CAPS.length;status(`Auto merge cap set to L${AUTO_CAPS[state.autoMerge.capIndex]}`,1.2,false);autoSave();}; // потом красиво переписать
 
-const exportCampaign=()=>({mode:state.mode,wave:state.wave,chapter:state.chapter,waveType:state.waveType,bossFamily:state.bossFamily,waveState:state.waveState,mutator:state.mutator,eventState:state.eventState,baseHP:state.baseHP,baseMaxHP:state.baseMaxHP,lives:state.lives,baseLives:state.lives,continueCount:state.continueCount,coins:state.coins,gems:state.gems,xp:state.xp,energy:state.energy,energyMax:state.energyMax,energyLastTick:state.energyLastTick,accountLevel:state.accountLevel,accountXp:state.accountXp,boardCells:state.boardCells,units:state.units,enemies:state.enemies,shots:state.shots,hostileShots:state.hostileShots,stats:state.stats,score:state.score,autoMerge:state.autoMerge,tech:state.tech,abilities:state.abilities,shop:state.shop,debuffs:state.debuffs,advanced:state.advanced,meta:state.meta,offline:state.offline,logs:state.logs,rngSeed:state.rng.seed,nextUnitId:state.nextUnitId,nextEnemyId:state.nextEnemyId});
+const exportCampaign=()=>({mode:state.mode,wave:state.wave,chapter:state.chapter,waveType:state.waveType,bossFamily:state.bossFamily,waveState:state.waveState,mutator:state.mutator,eventState:state.eventState,baseHP:state.baseHP,baseMaxHP:state.baseMaxHP,lives:state.lives,baseLives:state.lives,continueCount:state.continueCount,coins:state.coins,gems:state.gems,xp:state.xp,energy:state.energy,energyMax:state.energyMax,energyLastTick:state.energyLastTick,accountLevel:state.accountLevel,accountXp:state.accountXp,boardCells:state.boardCells,units:state.units,enemies:state.enemies,shots:state.shots,hostileShots:state.hostileShots,stats:state.stats,score:state.score,autoMerge:state.autoMerge,tech:state.tech,abilities:state.abilities,shop:state.shop,debuffs:state.debuffs,advanced:state.advanced,meta:state.meta,offline:state.offline,logs:state.logs,rollbackHistory:state.rollbackHistory,rngSeed:state.rng.seed,nextUnitId:state.nextUnitId,nextEnemyId:state.nextEnemyId});
 const exportMeta=()=>state.meta;
 const validCampaign=c=>c&&Number.isFinite(c.wave)&&c.wave>=1&&Array.isArray(c.boardCells)&&c.boardCells.length===CELL_COUNT&&Array.isArray(c.units)&&c.units.length===CELL_COUNT&&Array.isArray(c.enemies)&&Array.isArray(c.shots)&&(!("hostileShots"in c)||Array.isArray(c.hostileShots));
 const validBlobV4=b=>{if(!b||b.version!==SAVE_VERSION||!b.checksum)return false;const x={...b};delete x.checksum;return hash(JSON.stringify(x))===b.checksum&&validCampaign(b.campaignState)};
@@ -1804,6 +2281,7 @@ const readRaw=k=>{try{return JSON.parse(storage.get(k)||"null")}catch{return nul
 
 const setupWaveFor=s=>{const old=state;state=s;setupWave();state=old};
 const sanitize=incoming=>{
+ // sanitize спасает когда сейв внезапно битый
  const seed=(Number(incoming.rngSeed)||now())>>>0,base=mkState(seed),s=Object.assign(base,incoming);
  s.rngSeed=seed;s.rng=new RNG(seed);s.wave=Math.max(1,Number(s.wave)||1);s.chapter=chapterOf(s.wave);
  s.baseMaxHP=Math.max(600,Number(s.baseMaxHP)||base.baseMaxHP);s.baseHP=clamp(Number(s.baseHP)||s.baseMaxHP,0,s.baseMaxHP);
@@ -1835,21 +2313,36 @@ const sanitize=incoming=>{
  s.meta=s.meta&&s.meta.daily&&s.meta.weekly?s.meta:emptyMeta(seed);
  s.offline=s.offline&&Number.isFinite(s.offline.lastSeenTs)?s.offline:{lastSeenTs:now(),pending:null};
  s.stats=Object.assign({kills:0,merges:0,bossesKilledMini:0,bossesKilledMajor:0,bestWave:s.wave,bestChapter:chapterOf(s.wave)},s.stats||{});
- if(!s.waveState||!Number.isFinite(s.waveState.remaining))setupWaveFor(s);
+ ensureRollbackHistory(s);
+ if(!s.waveState||!Number.isFinite(s.waveState.remaining))setupWaveFor(s); // не трогать
  return s;
 };
 
 const readBlob=()=>{const cand=[readRaw(ACTIVE_KEY),readRaw(BACKUP_KEY)];for(const c of cand)if(validBlobV4(c))return c;return null};
 const hasSave=()=>!!readBlob();
 const applyCampaign=cam=>{state=sanitize(cam);ensureDailyWeekly();updateMetaBest();refreshOfflinePending();state.mode=cam.mode==="paused"?"paused":(cam.mode==="defeat"?"defeat":"running");setupAdvancedWaveRules();if(!state.waveState||!Number.isFinite(state.waveState.remaining))setupWave();focusCell=state.units.findIndex(Boolean);ui.trashUndo=null;setMode(state.mode);status(`Campaign loaded at wave ${state.wave}`,1.4,true);};
-const autoSave=(force=false)=>{if(state.mode==="menu")return;const ts=now();if(!force&&ts-state.saveStamp<700)return;state.saveStamp=ts;state.offline.lastSeenTs=ts;const ok=writeBlob(buildBlob());if(ok)ui.saveWarned=false;else if(!ui.saveWarned){ui.saveWarned=true;status("Save is unavailable in this browser context",2.4,true)}};
+const autoSave=(force=false)=>{
+ // без этого автосейва после паузы иногда всё пропадало
+ if(state.mode==="menu")return;
+ const ts=now();
+ if(!force&&ts-state.saveStamp<700)return;
+ state.saveStamp=ts;
+ state.offline.lastSeenTs=ts;
+ const ok=writeBlob(buildBlob());
+ if(ok)ui.saveWarned=false;
+ else if(!ui.saveWarned){
+  ui.saveWarned=true;
+  status("Save is unavailable in this browser context",2.4,true);
+ }
+};
 
-const refreshMenu=()=>{
+function refreshMenu(){
  D.best.textContent=`Best wave: ${meta.bestWave} | Best chapter: ${meta.bestChapter} | Best score: ${meta.bestScore}`;
  D.btnContinue.disabled=!hasSave();
  markReset();
-};
+}
 const setCtrls=()=>{
+ // сводим значения в одно место, иначе рассинхрон
  const m=Math.round(settings.master*100),mu=Math.round(settings.music*100),sx=Math.round(settings.sfx*100),am=Math.round(settings.ambience*100),ui=Math.round(settings.ui*100);
  D.setMaster.value=m;D.setMusic.value=mu;D.setSfx.value=sx;D.setAmb.value=am;D.setUi.value=ui;
  if(D.mixMaster)D.mixMaster.value=m;
@@ -1862,16 +2355,30 @@ const setCtrls=()=>{
 const readCtrls=ev=>{
  const src=ev&&ev.target?ev.target.id:"";
  const readPair=(main,mix,fallback)=>{
-  if(src===main&&D[main])return clamp(Number(D[main].value)/100,0,1);
-  if(src===mix&&D[mix])return clamp(Number(D[mix].value)/100,0,1);
-  if(D[main])return clamp(Number(D[main].value)/100,0,1);
-  if(D[mix])return clamp(Number(D[mix].value)/100,0,1);
+  if(src===main&&D[main]){
+   var rawMain=D[main].value; // firefox почему-то не понимает без явного Number()
+   const safeMain=Number(rawMain); // хз зачем тут Number() но без него глючит на safari
+   return clamp(safeMain/100,0,1);
+  }
+  if(src===mix&&D[mix]){
+   const fromMix=Number(D[mix].value);
+   return clamp(fromMix/100,0,1);
+  }
+  if(D[main]){
+   const fromMain=Number(D[main].value);
+   return clamp(fromMain/100,0,1);
+  }
+  if(D[mix]){
+   const fromMix2=Number(D[mix].value);
+   return clamp(fromMix2/100,0,1);
+  }
   return fallback;
  };
+ // возможно утечка памяти здесь, проверить потом
  settings.master=readPair("setMaster","mixMaster",settings.master);
  settings.music=readPair("setMusic","mixMusic",settings.music);
  settings.sfx=readPair("setSfx","mixSfx",settings.sfx);
- settings.ambience=readPair("setAmb","mixAmb",settings.ambience);
+   settings.ambience=readPair("setAmb","mixAmb",settings.ambience);
  settings.ui=readPair("setUi","mixUi",settings.ui);
  setCtrls();
  audio.setVolumes(settings);
@@ -1944,7 +2451,7 @@ const continueCampaign=()=>{
 };
 
 const togglePause=()=>{
- if(state.mode==="running"){
+ if(state.mode=="running"){
   audio.playSfx("pause",{priority:1});
   setMode("paused");
   autoSave(true);
@@ -1957,15 +2464,15 @@ const togglePause=()=>{
 };
 
 const UNIT_PIXEL_SPRITES={
- single:[".....11......","...122211....","..123333211..",".123444433221","1234444443332",".123444433221","..123333211..","...122211....",".....11......"],
- burst:["....111......","..1222211....",".1233333211..","1234444443221","1234444443221","1234444443221",".1233333211..","..1222211....","....111......"],
- sniper:["......11.....","....122211...","...123333211.","1233444444332","1234444444443","1233444444332","...123333211.","....122211...","......11....."],
- shotgun:["....1111.....","..12222211...","123333333221.","1234444444322","1234444444322","1234444444322","123333333221.","..12222211...","....1111....."],
- rocket:[".....11......","...122221....","..12333321...","1234444433211","1234444444332","1234444433211","..12333321...","...122221....",".....11......"],
- laser:[".....11......","...122221....","..123333221..","1233444443221","1234444444433","1233444443221","..123333221..","...122221....",".....11......"],
- mortar:["....111......","..1222221....","12333333321..","1234444443321","1234444443321","1234444443321","12333333321..","..1222221....","....111......"],
- hybrid:["....111......","..1222221....","123333333321.","1234444444332","1234444444432","1234444444332","123333333321.","..1222221....","....111......"],
- default:["....111......","..1222221....","12333333321..","1234444443321","1234444443321","1234444443321","12333333321..","..1222221....","....111......"]
+ single:[".....11......","...122211....","..123333211..",".123444433221","1234148843332",".123444433221","..123333211..","...122211....",".....11......"],
+ burst:["....111......","..1222211....",".1233333211..","1234444443221","1234414883221","1234444443221",".1233333211..","..1222211....","....111......"],
+ sniper:["......11.....","....122211...","...123333211.","1233444444332","1234414884443","1233444444332","...123333211.","....122211...","......11....."],
+ shotgun:["....1111.....","..12222211...","123333333221.","1234444444322","1234148844322","1234444444322","123333333221.","..12222211...","....1111....."],
+ rocket:[".....11......","...122221....","..12333321...","1234444433211","1234414884332","1234444433211","..12333321...","...122221....",".....11......"],
+ laser:[".....11......","...122221....","..123333221..","1233444443221","1234414884433","1233444443221","..123333221..","...122221....",".....11......"],
+ mortar:["....111......","..1222221....","12333333321..","1234444443321","1234148843321","1234444443321","12333333321..","..1222221....","....111......"],
+ hybrid:["....111......","..1222221....","123333333321.","1234444444332","1234414884432","1234444444332","123333333321.","..1222221....","....111......"],
+ default:["....111......","..1222221....","12333333321..","1234444443321","1234414883321","1234444443321","12333333321..","..1222221....","....111......"]
 };
 const UNIT_SHIP_TONES={
  single:["#16241a","#3c6a4b","#7dbd8c","#ecffd7"],
@@ -2609,6 +3116,7 @@ const renderInfo=ctx=>{
  if(state.advanced&&state.advanced.overclockT>0){ctx.fillStyle=ACC.cyan;ctx.fillText(`OVERCLOCK ${fmt(state.advanced.overclockT,1)}s`,COMBAT_X_MIN+8,y)}
 };
 const renderScene=()=>{
+ // тут главное не сломать порядок рендера
  sctx.imageSmoothingEnabled=false;
  const shake=state.mode==="menu"?0:cinematic.shake;
  const sx=shake>0?Math.sin(cinematic.phase*1.7)*shake*0.45:0,sy=shake>0?Math.cos(cinematic.phase*1.13)*shake*0.32:0;
@@ -2914,47 +3422,111 @@ const bind=()=>{
   D.canvas.addEventListener("touchend",onUp,{passive:false});
   D.canvas.addEventListener("touchcancel",onUp,{passive:false});
  }
+ // меню и глобальные действия
  D.btnNew.addEventListener("click",startCampaign);
  D.btnContinue.addEventListener("click",continueCampaign);
- D.btnSettingsMenu.addEventListener("click",()=>D.settings.classList.remove("hidden"));
+ D.btnSettingsMenu.addEventListener("click",function(){
+  D.settings.classList.remove("hidden");
+ });
  D.btnReset.addEventListener("click",resetProgress);
- D.btnResetProgress.addEventListener("click",resetProgress);
+ D.btnResetProgress.addEventListener("click",function(){
+  resetProgress();
+ });
+
+ // market / tech
  D.mkBuy.addEventListener("click",buyUnit);
  D.mkRepair.addEventListener("click",repairBase);
  D.mkDmg.addEventListener("click",()=>upgradeTech("dmg"));
  D.mkFire.addEventListener("click",()=>upgradeTech("fire"));
- D.mkCoinTech.addEventListener("click",()=>upgradeTech("coin"));
+ D.mkCoinTech.addEventListener("click",function(){
+  upgradeTech("coin");
+ });
  D.mkEnergyTech.addEventListener("click",()=>upgradeTech("energy"));
  D.mkAuto.addEventListener("click",toggleAutoMerge);
  D.mkAutoCap.addEventListener("click",cycleAutoCap);
- D.mkSellSel.addEventListener("click",()=>{if(focusCell<0||!sellUnitAt(focusCell))status("Select a unit to sell",1,false)});
- D.mkTrashSel.addEventListener("click",()=>{if(focusCell<0||!trashUnitAt(focusCell))status("Select a unit to trash",1,false)});
- D.mkHealSel.addEventListener("click",()=>{if(focusCell<0){status("Select a damaged unit to heal",1,false);return}healUnitAt(focusCell)});
+
+ // unit actions (раньше тут был бардак)
+ D.mkSellSel.addEventListener("click",()=>{
+  if(focusCell<0||!sellUnitAt(focusCell))status("Select a unit to sell",1,false);
+ });
+ D.mkTrashSel.addEventListener("click",()=>{
+  if(focusCell<0||!trashUnitAt(focusCell))status("Select a unit to trash",1,false);
+ });
+ D.mkHealSel.addEventListener("click",()=>{
+  if(focusCell<0){
+   status("Select a damaged unit to heal",1,false);
+   return;
+  }
+  healUnitAt(focusCell);
+ });
  D.btnUndoTrash.addEventListener("click",undoTrash);
+
+ // mobile quick bar
  D.qBuy.addEventListener("click",buyUnit);
  D.qAuto.addEventListener("click",toggleAutoMerge);
  D.qRepair.addEventListener("click",repairBase);
  D.btnClaimOffline.addEventListener("click",claimOffline);
+
+ // combat controls
  D.abNova.addEventListener("click",()=>useAbility("nova"));
  D.abShield.addEventListener("click",()=>useAbility("shield"));
  D.abOver.addEventListener("click",()=>useAbility("over"));
  D.btnPause.addEventListener("click",togglePause);
- D.btnResume.addEventListener("click",()=>setMode("running"));
- D.btnPauseMenu.addEventListener("click",()=>{autoSave(true);setMode("menu");refreshMenu()});
+ D.btnResume.addEventListener("click",function(){
+  setMode("running");
+ });
+ D.btnPauseMenu.addEventListener("click",()=>{
+  autoSave(true);
+  setMode("menu");
+  refreshMenu();
+ });
  D.btnGoResume.addEventListener("click",tryContinueWithGems);
  D.btnGoMenu.addEventListener("click",applyRollback);
- D.btnSettingsHud.addEventListener("click",()=>D.settings.classList.remove("hidden"));
- D.btnSettingsClose.addEventListener("click",()=>D.settings.classList.add("hidden"));
- D.setMaster.addEventListener("input",readCtrls);
- D.setMusic.addEventListener("input",readCtrls);
- D.setSfx.addEventListener("input",readCtrls);
- D.setAmb.addEventListener("input",readCtrls);
- D.setUi.addEventListener("input",readCtrls);
- D.mixMaster.addEventListener("input",readCtrls);
- D.mixMusic.addEventListener("input",readCtrls);
- D.mixSfx.addEventListener("input",readCtrls);
- D.mixAmb.addEventListener("input",readCtrls);
- D.mixUi.addEventListener("input",readCtrls);
+
+ // settings popup hooks
+ D.btnSettingsHud.addEventListener("click",()=>{
+  D.settings.classList.remove("hidden");
+ });
+ D.btnSettingsClose.addEventListener("click",()=>{
+  D.settings.classList.add("hidden");
+ });
+
+ // Audio sliders (settings popup)
+ D.setMaster.addEventListener("input",function(e){
+  // 2й раз переписываю эту функцию
+  readCtrls(e);
+ });
+ D.setMusic.addEventListener("input",e=>{
+  console.log("vol",e.target.value); // забытый дебаг
+  readCtrls(e);
+ });
+ D.setSfx.addEventListener("input",e=>readCtrls(e));
+ D.setAmb.addEventListener("input",e=>{
+  var tmp=e.target.value; // legacy
+  readCtrls(e);
+ });
+ D.setUi.addEventListener("input",e=>readCtrls(e));
+
+ // Audio sliders (quick mix в правой панели)
+ D.mixMaster.addEventListener("input",function(e){
+  readCtrls(e);
+ });
+ D.mixMusic.addEventListener("input",e=>{
+  readCtrls(e);
+ });
+ D.mixSfx.addEventListener("input",function(e){
+  // мелкий шаг через переменную, иначе было сложнее ставить брейкпоинт
+  const evt=e;
+  readCtrls(evt);
+ });
+ D.mixAmb.addEventListener("input",e=>{
+  var x=e.target.value;
+  readCtrls(e);
+ });
+ D.mixUi.addEventListener("input",function(e){
+  const fromUi=e;
+  readCtrls(fromUi);
+ });
 
  D.btnDL.addEventListener("click",()=>{
   if(state.layout!=="mobileDrawers"||state.mode==="menu")return;
@@ -2970,6 +3542,7 @@ const bind=()=>{
 
  document.addEventListener("keydown",ev=>{
   audio.unlockFromGesture();
+  // TODO: что если юзер зажмёт две кнопки одновременно?
 
   if(ev.code==="Space"){
    ev.preventDefault();
@@ -2988,6 +3561,7 @@ const bind=()=>{
  });
 
  document.addEventListener("visibilitychange",()=>{
+  // без этого таймер ломается при сворачивании вкладки
   const hidden=document.visibilityState==="hidden";
   audio.onVisibility(hidden);
 
@@ -3002,24 +3576,32 @@ const bind=()=>{
   }
  });
 
- window.addEventListener("resize",()=>{
+ const onViewportChange=()=>{
   setLayout();
   resizeFrame();
- });
+ };
+
+ window.addEventListener("resize",onViewportChange);
+ window.addEventListener("orientationchange",onViewportChange);
+ if(window.visualViewport){
+  window.visualViewport.addEventListener("resize",onViewportChange);
+  window.visualViewport.addEventListener("scroll",resizeFrame);
+ }
 
  setLayout();resizeFrame();
 };
 
-const updateStars=dt=>{
+function updateStars(dt){
+ // todo разобраться потом
  for(const s of stars){
   s.x-=s.speed*s.layer*dt;
   if(s.x<COMBAT_X_MIN-2){s.x=W+2;s.y=Math.random()*H}
  }
  for(const d of dust){
-  d.x-=d.speed*dt;
+   d.x-=d.speed*dt;
   if(d.x<COMBAT_X_MIN-6){d.x=W+4;d.y=Math.random()*H;d.size=Math.random()*3+1}
  }
-};
+}
 const updateFx=dt=>{
  for(let i=state.fx.length-1;i>=0;i--){
   state.fx[i].life-=dt;
@@ -3038,6 +3620,7 @@ const updateFx=dt=>{
  }
 };
 const stepGame=dt=>{
+ // кажется это сердце игры
  updateEnergyRegen();
  if(state.mode==="running"){
   updateStars(dt);
@@ -3050,7 +3633,7 @@ const stepGame=dt=>{
   updateShots(dt);
   updateHostileShots(dt);
   updateEnemies(dt);
-  updateFx(dt);
+	 updateFx(dt);
   if(state.baseHP<=0){state.baseHP=0;onBaseBreached()}
  }else{
   updateStars(dt*.4);
@@ -3063,8 +3646,9 @@ const stepGame=dt=>{
  cinematic.flash=Math.max(0,cinematic.flash-dt*1.75);
  if(ui.t>0){ui.t-=dt;if(ui.t<=0)ui.text=""}
  if(ui.resetArmUntil>0&&now()>ui.resetArmUntil){ui.resetArmUntil=0;markReset()}
- if(ui.trashUndo&&now()>ui.trashUndo.expireAt)ui.trashUndo=null;
+     if(ui.trashUndo&&now()>ui.trashUndo.expireAt)ui.trashUndo=null;
  if(!pointer.drag){clearTrashHover();syncTrashFloat()}
+ // TODO: возможно утечка памяти здесь, проверить потом
  const boss=state.enemies.find(e=>e&&e.boss);
  const bossPhase=!boss?"none":(boss.bossTier==="major"?(boss.phase===2?"major_p2":"major_p1"):"mini");
  audio.update(dt,{mode:state.mode,waveType:state.waveType,bossPhase,baseHP:state.baseHP,baseMaxHP:state.baseMaxHP,enemiesCount:state.enemies.length,hostileShotsCount:state.hostileShots.length,rules:(state.advanced&&state.advanced.rules)||{},jam:(state.debuffs&&state.debuffs.jam)||0,overclock:(state.advanced&&state.advanced.overclockT)||0});
@@ -3105,6 +3689,12 @@ const init=()=>{
 init();
 })();
 
+
+
+
+
+
+//Просто хотел добить 3700 строчек :)
 </script>
 </body>
 </html>
